@@ -8,8 +8,15 @@ The pandemic caused widespread disruption across many industries, with some expe
 
 ### Data Exploration & Conversion
 
-Pandas was used for data cleaning/manipulation and conversion to eliminte null and better understand the dataset 
+The Layoff dataset was extrated from Kraggle as excel file and pandas was used for data cleaning/manipulation and conversion to eliminte null and better understand the dataset.
+
+
 
 
 ![](https://github.com/termehmohebbie/deadline-mode/blob/main/Images/Data%20%20Exploration%20%20%26%20Conversion.PNG)
 
+
+![](https://github.com/termehmohebbie/deadline-mode/blob/main/Images/Capture.PNG)
+
+
+Used Matplotib to plot a pie chart
