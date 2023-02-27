@@ -44,6 +44,7 @@ The Layoff dataset was extrated from Kraggle as excel file and pandas was used f
 
 Created a dashboard showing three visualizations we created: using Java Script's D3 library and created line chart and bar chart, used Leaflet and created a map. We created filters on the left side of the dashboard, the filters allow user to filter the data by industry and country, which reflects on the leaflet map and line chart. 
 
-![](https://github.com/termehmohebbie/deadline-mode/blob/main/Images/Dashboard_1.PNG)
+<img width="1263" alt="Dashboard_1" src="https://user-images.githubusercontent.com/115378440/221465476-72dbf719-f573-4f20-95d5-6ea81bd0d31e.png">
 
-![](https://github.com/termehmohebbie/deadline-mode/blob/main/Images/Dashboard_2.PNG)
+<img width="1000" alt="Dashboard_2" src="https://user-images.githubusercontent.com/115378440/221465491-42fd3e62-cb0b-4694-bb37-19a8b54e9b7a.png">
+
