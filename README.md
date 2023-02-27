@@ -41,3 +41,9 @@ The Layoff dataset was extrated from Kraggle as excel file and pandas was used f
 * The URL https://www.convertcsv.com/csv-to-geojson.htm was used to convert the data in the geojson file
 
 ## Creating the Dashboard
+
+Created a dashboard showing three visualizations we created: using Java Script's D3 library and created line chart and bar chart, used Leaflet and created a map. We created filters on the left side of the dashboard, the filters allow user to filter the data by industry and country, which reflects on the leaflet map and line chart. 
+
+![](https://github.com/termehmohebbie/deadline-mode/blob/main/Images/Dashboard1.PNG)
+
+![](https://github.com/termehmohebbie/deadline-mode/blob/main/Images/Dashboard2.PNG)
