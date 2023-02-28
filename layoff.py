@@ -13,7 +13,6 @@ import csv, sqlite3
 import pandas as pd
 from pathlib import Path
 import os
-# from django.db import connection
 
 Path('layoff.sqlite').touch()
 conn = sqlite3.connect('layoff.sqlite')
@@ -57,7 +56,6 @@ def industry():
      industries = list(np.ravel(results))
      return jsonify(industries)
 
-
 @app.route("/countries")
 def country(): 
      session = Session(engine)
@@ -78,13 +76,11 @@ def date():
      dates = list(np.ravel(results))
      return jsonify(dates)
 
-
 @app.route("/layoff/geoJSON/")
 def layoff_geoJSON():
     with open("layoff.geojson") as file:
         json_decoded = json.load(file)
     return json_decoded 
-
 
 @app.route("/dataset/barchart")
 def barchart():
@@ -94,7 +90,6 @@ def barchart():
     conn.close()
     result = [{k: item[k] for k in item.keys()} for item in temp]
     return jsonify(result)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
