@@ -17,6 +17,7 @@
             rel="stylesheet"
     />
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}"/>
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
 </head>
@@ -32,12 +33,10 @@
             <h2>Dashboard</h2>
             <div class="filters">
                 <h4>Industry</h4>
-<!--                <select class="dd-country" id="selDataset" onchange="optionChangedi(this.value)">-->
                 <select class="dd-country" id="selDataset" onchange="optionDataFilter()">
                     <option selected>All</option>
                 </select>
                 <h4>Country</h4>
-<!--                <select class="dd-country" id="selDataset1" onchange="optionChangedc(this.value)">-->
                 <select class="dd-country" id="selDataset1" onchange="optionDataFilter()">
                     <option selected>All</option>
                 </select>
@@ -91,8 +90,10 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
 
+
+    //creating dropdown lists
+    //Industry filter
     var selector = d3.select("#selDataset");
-    //creating a dropdown list
     d3.json('/industries').then((data) => {
         data.forEach((sample) => {
             selector
@@ -102,8 +103,9 @@
         });
     });
 
+
+    //Country filter
     var selector1 = d3.select("#selDataset1");
-    //creating a dropdown list
     d3.json('/countries').then((data) => {
         data.forEach((sample) => {
             selector1
@@ -113,8 +115,9 @@
         });
     });
 
+
+    //Date From filter
     var selector2 = d3.select("#selDataset2");
-    //creating a dropdown list
     d3.json('/dates').then((data) => {
         data.forEach((sample) => {
             selector2
@@ -124,8 +127,9 @@
         });
     });
 
+
+    //Date To filter
     var selector3 = d3.select("#selDataset3");
-    //creating a dropdown list
     d3.json('/dates').then((data) => {
         data.forEach((sample) => {
             selector3
@@ -141,80 +145,17 @@
         filteredData = data.filter(function (item) {
             return item.Industry == sample
         })
-    }
-
-    function buildMetadata(sample) {
-        let filteredData = []
-        let geoFiltered = []
-        d3.json('/dataset').then((data) => {
-            if (sample !== "All") {
-                filteredData = data.filter(function (item) {
-                    return item.Industry == sample
-                })
-                changeSummary(filteredData);
-            } else {
-                filteredData = data
-                changeSummary(filteredData);
-            }
-        });
-        d3.json('/layoff/geoJSON').then((data) => {
-            let geoData = data.features
-            if (sample !== "All") {
-                geoFiltered = geoData.filter(function (item) {
-                    return item.properties.Industry == sample
-                })
-            } else {
-                geoFiltered = geoData
-            }
-            createMap(geoFiltered);
-            createLn(geoFiltered);
-        });
-        changeSummary(filteredData);
-    }
-
-    function optionChangedi(newOption) {
-        buildMetadata(newOption);
-    }
-
-    function buildMetadatac(sample) {
-        let filteredData = [];
-        let geoFiltered = [];
-        d3.json('/dataset').then((data) => {
-            if (sample !== "All") {
-                filteredData = data.filter(function (item) {
-                    return item.Country == sample
-                })
-                changeSummary(filteredData);
-            } else {
-                filteredData = data
-                changeSummary(filteredData);
-            }
-        });
-        d3.json('/layoff/geoJSON').then((data) => {
-            let geoData = data.features
-            if (sample !== "All") {
-                geoFiltered = geoData.filter(function (item) {
-                    return item.properties.Country == sample
-                })
-            } else {
-                geoFiltered = geoData
-            }
-            createMap(geoFiltered);
-            createLn(geoFiltered);
-            groupBy(geoFiltered);
-        });
-        changeSummary(filteredData);
     };
 
-    function optionChangedc(newOption) {
-        buildMetadatac(newOption);
-    }
 
+    //filtering the data
     function optionDataFilter() {
+
         let industry = document.getElementById("selDataset").value;
         let country = document.getElementById("selDataset1").value;
         let from = document.getElementById("selDataset2").value;
         let to = document.getElementById("selDataset3").value;
+
         if (from === 'From') {
             let today = new Date();
             let dd = String(today.getDate()).padStart(2, '0');
@@ -229,8 +170,10 @@
             let yyyy = today.getFullYear();
             to = yyyy + '-' + mm + '-' + dd;
         }
+
         let filteredData = [];
         let geoFiltered = [];
+
         d3.json('/dataset').then((data) => {
             if (industry !== "All") {
                 filteredData = data.filter(function (item) {
@@ -250,6 +193,7 @@
             })
             changeSummary(filteredData);
         });
+
         d3.json('/layoff/geoJSON').then((data) => {
             let geoData = data.features
             if (industry !== "All") {
@@ -272,8 +216,10 @@
             createLn(geoFiltered);
             groupBy(geoFiltered);
         });
-    }
+    };
 
+
+    //generating a summary based on the filters
     function changeSummary(data){
         if (data.length === 0) {
             d3.json('/dataset').then((data) => {
@@ -285,7 +231,7 @@
         for (let i = 0; i < data.length; i++) {
             totalLaidOff += data[i].Laid_Off_Count;
         }
-        let avg = totalLaidOff/12
+        let avg = totalLaidOff/data.length
         let worstMonth = 0;
         let worstYear = 0;
         let worstMonthYearCount = 0;
@@ -303,8 +249,10 @@
         document.getElementById("avg").innerHTML = avg.toFixed(2);
         document.getElementById("total").innerHTML = totalLaidOff;
         document.getElementById("worst").innerHTML = worstMonth + "/" + worstYear + " " + worstMonthYearCount + " people";
-    }
+    };
 
+
+    //creating a leaflet map
     var defaultMap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -319,10 +267,14 @@
         zoom: 1.1,
         layers: [defaultMap]
     });
+
     defaultMap.addTo(myMap);
     let layoffs = new L.LayerGroup();
 
+
+    //adding the data layer to the map
     function createMap(filteredGeo) {
+
         layoffs.clearLayers();
 
         function dataColor(Laid_Off_Count) {
@@ -366,7 +318,7 @@
         layoffs.addTo(myMap);
     };
 
-    //d3.json('/dataset').then((data) => {
+    //creating the line chart
     function createLn(geoFiltered) {
         var labeldata = [];
         var chrtdata = [];
@@ -382,6 +334,7 @@
                 chrtdata.push(count);
             }
         }
+
         labeldata = labeldata.reverse();
         var ctx = document.getElementById("myChart").getContext("2d");
         var myChart = new Chart(ctx, {
@@ -401,26 +354,25 @@
                 }]
             }
         });
-        //});
-
-
     };
 
+    //using groupby to find the sum of layoffs for each filter
     function groupBy(arr) {
         var helper = {};
         var result = arr.reduce(function (r, o) {
             var key = o.properties.Date;
 
             if (!helper[key]) {
-                helper[key] = Object.assign({}, o); // create a copy of o
+                helper[key] = Object.assign({}, o);
                 r.push(helper[key]);
             } else {
                 helper[key].properties.Laid_Off_Count += o.properties.Laid_Off_Count;
             }
             return r;
         }, []);
-    }
+    };
 
+    //creating the bar chart
     d3.json('/dataset/barchart').then((data) => {
         var barlabeldata = [];
         var bardata = [];
@@ -448,9 +400,9 @@
         });
     });
 
+    //plotting the whole dataset when we load the page
     function init() {
-        optionChangedi('All');
-        optionChangedc('All');
+        optionDataFilter('All');
     };
 
     init();
